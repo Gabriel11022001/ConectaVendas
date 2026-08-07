@@ -2,7 +2,7 @@ import { Botao } from "@/components/Botao";
 import Campo, { TipoCampo } from "@/components/Campo";
 import ConectaVendasTela from "@/components/ConectaVendasTela";
 import { useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { styles } from "./styles";
 
 // tela de login do app
@@ -48,6 +48,11 @@ const Login = ({ navigation }: any) => {
 
   }
 
+  // redirecionar para a tela de esqueci minha senha
+  const redirecionarEsqueciSenha = (): void => {
+
+  }
+
   return (
     <ConectaVendasTela>
       <ScrollView showsHorizontalScrollIndicator={ false }>
@@ -79,11 +84,19 @@ const Login = ({ navigation }: any) => {
           onVisualizarSenha={ () => {
             setSenhaVisivel(!senhaVisivel);
           } } />
+        { /** botão de esqueci senha */ }
+        <View style={ styles.containerEsqueciSenha }>
+          <Pressable
+            onPress={ redirecionarEsqueciSenha }>
+            <Text style={ styles.txtEsqueciSenha }>Esqueci minha senha</Text>
+          </Pressable>
+        </View>
         { /** botão de login do app */ }
         <Botao
           titulo="Entrar"
           carregando={ carregando }
           tipo="default"
+          margemBaixo={ 10 }
           habilitado={
             !carregando 
             && email != ""
@@ -93,6 +106,22 @@ const Login = ({ navigation }: any) => {
           }
           onClick={ () => {
             efetuarLogin();
+          } } />
+        { /** container separando o botão do login do botão de registrar-se */ }
+        <View style={ styles.containerOu }>
+          <View style={ styles.containerOuSeparador } />
+          <Text style={ styles.txtOu }>Ou</Text>
+          <View style={ styles.containerOuSeparador } />
+        </View>
+        { /** botão para redirecionar o usuário para a tela de cadastro de perfil */ }  
+        <Botao
+          tipo="cadastro_usuario"
+          carregando={ false }
+          habilitado={ true }
+          titulo=""
+          margemTopo={ 10 }
+          onClick={ () => {
+            navigation.navigate("cadastro_perfil");
           } } />
       </ScrollView>
     </ConectaVendasTela>

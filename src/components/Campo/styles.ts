@@ -3,10 +3,10 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
 
   containerCampo: {
-    width: "95%",
-    marginHorizontal: "2.5%",
+    width: "90%",
+    marginHorizontal: "5%",
     marginVertical: 20,
-    padding: 20,
+    padding: 10,
     borderStyle: "solid",
     borderWidth: 1,
     borderColor: "#D1D5DB",

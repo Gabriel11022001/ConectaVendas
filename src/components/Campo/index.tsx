@@ -1,6 +1,8 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Fontisto from '@expo/vector-icons/Fontisto';
+import Octicons from '@expo/vector-icons/Octicons';
 import { Pressable, Text, TextInput, View } from "react-native";
 import { styles } from './styles';
 
@@ -13,7 +15,8 @@ export enum TipoCampo {
   cnpj,
   cep,
   data,
-  default
+  default,
+  identificacao
 
 }
 
@@ -56,6 +59,18 @@ const Campo = ({
     if (tipoCampo === TipoCampo.senha) {
 
       return <FontAwesome name="chain-broken" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />
+    }
+
+    // icone do campo de nome
+    if (tipoCampo === TipoCampo.identificacao) {
+
+      return <Octicons name="person" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
+    }
+
+    // icone do campo de telefone
+    if (tipoCampo === TipoCampo.telefone) {
+
+      return <Feather name="phone" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
     }
 
   }

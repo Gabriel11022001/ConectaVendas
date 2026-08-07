@@ -6,8 +6,8 @@ const corPrimaria: string = process.env.EXPO_PUBLIC_COR_PRIMARIA ?? "";
 const styles = StyleSheet.create({
 
   botao: {
-    width: "95%",
-    marginHorizontal: "2.5%",
+    width: "90%",
+    marginHorizontal: "5%",
     height: 65,
     alignItems: "center",
     justifyContent: "center",
@@ -24,6 +24,27 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold"
+  },
+  botaoCadastroUsuario: {
+    width: "90%",
+    marginHorizontal: "5%",
+    height: 65,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    borderRadius: 12,
+    backgroundColor: "#fff",
+    marginTop: 30,
+    borderStyle: "solid",
+    borderWidth: 2,
+    borderColor: corPrimaria
+  },
+  tituloBotaoCadastrarUsuario: {
+    color: corPrimaria,
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+    marginStart: 10
   }
 
 });
