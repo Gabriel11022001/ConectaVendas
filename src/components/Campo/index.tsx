@@ -73,6 +73,12 @@ const Campo = ({
       return <Feather name="phone" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
     }
 
+    // icone do campo de data
+    if (tipoCampo === TipoCampo.data) {
+
+      return <Fontisto name="date" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
+    }
+
   }
 
   // botão de visualizar senha
@@ -117,7 +123,7 @@ const Campo = ({
           secureTextEntry={ tipoCampo === TipoCampo.senha && !senhaVisivel } />
         { tipoCampo === TipoCampo.senha && <BotaoVisualizarSenha /> }
       </View>
-      { erro != "" && <Text>{ erro }</Text> }
+      { erro != "" && <Text style={ styles.erro }>{ erro }</Text> }
     </View>
   );
 }

@@ -1,6 +1,7 @@
 import { Botao } from "@/components/Botao";
 import Campo, { TipoCampo } from "@/components/Campo";
 import ConectaVendasTela from "@/components/ConectaVendasTela";
+import { Validador } from "@/utils/validacoes";
 import { useState } from "react";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { styles } from "./styles";
@@ -21,6 +22,8 @@ const Login = ({ navigation }: any) => {
 
     if (emailDigitado.trim().length === 0) {
       setErroEmail("Informe o e-mail");
+    } else if (!Validador.validarEmail(emailDigitado.trim())) {
+      setErroEmail("E-mail inválido");
     }
 
   }

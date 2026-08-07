@@ -23,6 +23,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginStart: 10,
     flex: 1
+  },
+  erro: {
+    color: "red",
+    fontSize: 15,
+    fontWeight: "bold"
   }
 
 });

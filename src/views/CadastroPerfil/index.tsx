@@ -2,6 +2,7 @@ import { Botao } from "@/components/Botao";
 import Campo, { TipoCampo } from "@/components/Campo";
 import ConectaVendasTela from "@/components/ConectaVendasTela";
 import TituloTela from "@/components/TituloTela";
+import { Validador } from "@/utils/validacoes";
 import { useState } from "react";
 import { ScrollView } from "react-native";
 
@@ -42,6 +43,8 @@ const CadastroPerfil = ({ navigation }: any) => {
   const [ erroDataNascimento, setErroDataNascimento ] = useState<string>("");
   const [ erroSenha, setErroSenha ] = useState<string>("");
   const [ erroConfirmarSenha, setErroConfirmarSenha ] = useState<string>("");
+  const [ senhaVisivel, setSenhaVisivel ] = useState<boolean>(false); 
+  const [ confirmarSenhaVisivel, setConfirmarSenhaVisivel ] = useState<boolean>(false);
 
   const onDigitarCampo = ({ valor, campo }: CampoDigitar): void => {
 
@@ -53,6 +56,8 @@ const CadastroPerfil = ({ navigation }: any) => {
 
         if (valor.trim().length === 0) {
           setErroNomeCompleto("Informe o nome completo");
+        } else if (!Validador.validarNome(valor.trim())) {
+          setErroNomeCompleto("O nome deve possuir no mínimo três caracteres");
         }
 
         break;
@@ -63,6 +68,8 @@ const CadastroPerfil = ({ navigation }: any) => {
 
         if (valor.trim().length === 0) {
           setErroEmail("Informe o e-mail");
+        } else if (!Validador.validarEmail(valor.trim())) {
+          setErroEmail("E-mail inválido");
         }
 
         break;
@@ -73,6 +80,52 @@ const CadastroPerfil = ({ navigation }: any) => {
 
         if (valor.trim().length === 0) {
           setErroTelefone("Informe o telefone");
+        } else if (!Validador.validarTelefone(valor.trim())) {
+          setErroTelefone("Telefone inválido");
+        }
+
+        break;
+      // validar o cpf
+      case TipoCampoDigitar.cpf:
+        setCpf(valor);
+        setErroCpf("");
+
+        if (valor.trim().length === 0) {
+          setErroCpf("Informe o cpf");
+        } else if (!Validador.validarCpf(valor.trim())) {
+          setErroCpf("CPF inválido");
+        }
+
+        break;
+      // validar data de nascimento
+      case TipoCampoDigitar.dataNascimento:
+        setDataNascimento(valor);
+        setErroDataNascimento("");
+
+        if (valor.trim().length === 0) {
+          setErroDataNascimento("Informe a data de nascimento");
+        } else if (!Validador.validarDataNascimento(valor.trim())) {
+          setErroDataNascimento("Data de nascimento inválida");
+        }
+
+        break;
+      // validar a senha
+      case TipoCampoDigitar.senha:
+        setSenha(valor);
+        setErroSenha("");
+
+        if (valor.trim().length === 0) {
+          setErroSenha("Informe a senha");
+        }
+        
+        break;
+      // validar a confirmação de senha
+      case TipoCampoDigitar.senhaConfirmar:
+        setConfirmarSenha(valor);
+        setErroConfirmarSenha("");
+
+        if (valor.trim().length === 0) {
+          setErroConfirmarSenha("Informe a senha de confirmação");
         }
 
         break;
@@ -130,6 +183,66 @@ const CadastroPerfil = ({ navigation }: any) => {
             valor: telefoneDigitado
           }
         ) } />
+      { /** campo de cpf */ }
+      <Campo
+        tipoCampo={ TipoCampo.identificacao }
+        placeholder="CPF"
+        habilitado={ true }
+        erro={ erroCpf }
+        valor={ cpf }
+        onAlterarValor={ (cpfDigitado: string) => onDigitarCampo(
+          {
+            campo: TipoCampoDigitar.cpf,
+            valor: cpfDigitado
+          }
+        ) } />
+      { /** campo de data de nascimento */ }
+      <Campo
+        tipoCampo={ TipoCampo.data }
+        placeholder="Data de Nascimento"
+        habilitado={ true }
+        erro={ erroDataNascimento }
+        valor={ dataNascimento }
+        onAlterarValor={ (dataNascimentoDigitado: string) => onDigitarCampo(
+          {
+            campo: TipoCampoDigitar.dataNascimento,
+            valor: dataNascimentoDigitado
+          }
+        ) } />
+      { /** campo de data da senha */ }
+      <Campo
+        tipoCampo={ TipoCampo.senha }
+        placeholder="Senha"
+        habilitado={ true }
+        erro={ erroSenha }
+        valor={ senha }
+        onAlterarValor={ (senhaDigitado: string) => onDigitarCampo(
+          {
+            campo: TipoCampoDigitar.senha,
+            valor: senhaDigitado
+          }
+        ) }
+        senhaVisivel={ senhaVisivel }
+        onVisualizarSenha={ () => {
+          setSenhaVisivel(!senhaVisivel);
+        } } />
+      { /** campo de confirmar senha */ }
+      <Campo
+        tipoCampo={ TipoCampo.senha }
+        placeholder="Confirmar Senha"
+        habilitado={ true }
+        erro={ erroConfirmarSenha }
+        valor={ confirmarSenha }
+        onAlterarValor={ (confirmarSenhaDigitado: string) => onDigitarCampo(
+          {
+            campo: TipoCampoDigitar.senhaConfirmar,
+            valor: confirmarSenhaDigitado
+          }
+        ) }
+        senhaVisivel={ confirmarSenhaVisivel }
+        onVisualizarSenha={ () => {
+          setConfirmarSenhaVisivel(!confirmarSenhaVisivel);
+        } } />
       { /** botão para afetuar o login */ }
       <Botao
         titulo="Cadastrar"
