@@ -1,7 +1,11 @@
 import { Botao } from "@/components/Botao";
 import Campo, { TipoCampo } from "@/components/Campo";
 import ConectaVendasTela from "@/components/ConectaVendasTela";
+import Loader from "@/components/Loader";
 import TituloTela from "@/components/TituloTela";
+import { UsuarioMesmoEmailException } from "@/exceptions/usuarioMesmoEmailException";
+import { UsuarioMesmoTelefoneException } from "@/exceptions/usuarioMesmoTelefoneException";
+import { Usuario } from "@/types/usuario";
 import { Validador } from "@/utils/validacoes";
 import { useState } from "react";
 import { ScrollView } from "react-native";
@@ -133,12 +137,58 @@ const CadastroPerfil = ({ navigation }: any) => {
 
   }
 
+  // validar se existe outro usuário cadastrado com o mesmo e-mail
+  const validarExisteUsuarioMesmoEmail = async () => {
+    throw new UsuarioMesmoEmailException();
+  }
+
+  // validar se existe outro usuáiro cadastrado com o mesmo telefone
+  const validarExisteOutroUsuarioMesmoTelefone = async () => {
+    throw new UsuarioMesmoTelefoneException();
+  }
+
   // efetuar o cadastro do usuário
   const cadastrar = async () => {
+
+    try {
+      setCarregando(true);
+
+      const usuario: Usuario = {
+        nomeCompleto: nomeCompleto.trim(),
+        email: email.trim(),
+        telefone: telefone.trim(),
+        dataNascimento: dataNascimento.trim(),
+        ativo: true,
+        senha: senha.trim()
+      }
+
+      console.log("Cadastrar o usuário");
+      console.log(usuario);
+
+      // validar se existe outro usuário cadastrado com o mesmo e-mail
+      await validarExisteUsuarioMesmoEmail();
+
+      // validar se existe outro usuário cadastrado com o mesmo telefone
+      await validarExisteOutroUsuarioMesmoTelefone();
+    } catch (e) {
+
+      if (e as UsuarioMesmoEmailException) {
+        console.log("Existe outro usuário cadastrado com o mesmo e-mail!");
+      } else if (e as UsuarioMesmoTelefoneException) {
+        console.log("Existe outro usuário cadastrado com o mesmo telefone!");
+      } else {
+        console.log(`Erro: ${ e }`);
+      }
+
+    } finally {
+      setCarregando(false);
+    }
 
   }
 
   return <ConectaVendasTela>
+    { /** loader de carregamento da tela */ }
+    <Loader carregando={ carregando } msg="Cadastrando perfil, aguarde..." />
     <ScrollView showsHorizontalScrollIndicator={ false }>
       { /** título da tela */ }
       <TituloTela
@@ -150,7 +200,7 @@ const CadastroPerfil = ({ navigation }: any) => {
         placeholder="Nome Completo"
         valor={ nomeCompleto }
         erro={ erroNomeCompleto }
-        habilitado={ true }
+        habilitado={ !carregando }
         onAlterarValor={ (nomeCompletoDigitado: string) => {
           onDigitarCampo({
             valor: nomeCompletoDigitado,
@@ -161,7 +211,7 @@ const CadastroPerfil = ({ navigation }: any) => {
       <Campo
         tipoCampo={ TipoCampo.email }
         placeholder="E-mail"
-        habilitado={ true }
+        habilitado={ !carregando }
         erro={ erroEmail }
         valor={ email }
         onAlterarValor={ (emailDigitado: string) => onDigitarCampo(
@@ -174,7 +224,7 @@ const CadastroPerfil = ({ navigation }: any) => {
       <Campo
         tipoCampo={ TipoCampo.telefone }
         placeholder="Telefone"
-        habilitado={ true }
+        habilitado={ !carregando }
         erro={ erroTelefone }
         valor={ telefone }
         onAlterarValor={ (telefoneDigitado: string) => onDigitarCampo(
@@ -185,9 +235,9 @@ const CadastroPerfil = ({ navigation }: any) => {
         ) } />
       { /** campo de cpf */ }
       <Campo
-        tipoCampo={ TipoCampo.identificacao }
+        tipoCampo={ TipoCampo.cpf }
         placeholder="CPF"
-        habilitado={ true }
+        habilitado={ !carregando }
         erro={ erroCpf }
         valor={ cpf }
         onAlterarValor={ (cpfDigitado: string) => onDigitarCampo(
@@ -200,7 +250,7 @@ const CadastroPerfil = ({ navigation }: any) => {
       <Campo
         tipoCampo={ TipoCampo.data }
         placeholder="Data de Nascimento"
-        habilitado={ true }
+        habilitado={ !carregando }
         erro={ erroDataNascimento }
         valor={ dataNascimento }
         onAlterarValor={ (dataNascimentoDigitado: string) => onDigitarCampo(
@@ -213,7 +263,7 @@ const CadastroPerfil = ({ navigation }: any) => {
       <Campo
         tipoCampo={ TipoCampo.senha }
         placeholder="Senha"
-        habilitado={ true }
+        habilitado={ !carregando }
         erro={ erroSenha }
         valor={ senha }
         onAlterarValor={ (senhaDigitado: string) => onDigitarCampo(
@@ -230,7 +280,7 @@ const CadastroPerfil = ({ navigation }: any) => {
       <Campo
         tipoCampo={ TipoCampo.senha }
         placeholder="Confirmar Senha"
-        habilitado={ true }
+        habilitado={ !carregando }
         erro={ erroConfirmarSenha }
         valor={ confirmarSenha }
         onAlterarValor={ (confirmarSenhaDigitado: string) => onDigitarCampo(

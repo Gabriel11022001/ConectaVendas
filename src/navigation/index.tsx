@@ -1,4 +1,5 @@
 import CadastroPerfil from '@/views/CadastroPerfil';
+import EsqueciSenha from '@/views/EsqueciSenha';
 import Login from '@/views/Login';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -31,6 +32,13 @@ const telas: Array<{ titulo: string, apresentaMenu: boolean, tela: any, nomeTela
     apresentaMenu: true,
     nomeTela: "cadastro_perfil",
     tela: CadastroPerfil
+  },
+  {
+    // tela de recuperação de senha
+    titulo: "Esqueci Minha Senha",
+    apresentaMenu: true,
+    nomeTela: "recuperar_senha",
+    tela: EsqueciSenha
   }
 ];
 

@@ -22,8 +22,7 @@ const styles = StyleSheet.create({
   titulo: {
     color: "#fff",
     textAlign: "center",
-    fontSize: 20,
-    fontWeight: "bold"
+    fontSize: 20
   },
   botaoCadastroUsuario: {
     width: "90%",
@@ -43,7 +42,6 @@ const styles = StyleSheet.create({
     color: corPrimaria,
     textAlign: "center",
     fontSize: 20,
-    fontWeight: "bold",
     marginStart: 10
   }
 

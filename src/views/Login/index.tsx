@@ -2,7 +2,8 @@ import { Botao } from "@/components/Botao";
 import Campo, { TipoCampo } from "@/components/Campo";
 import ConectaVendasTela from "@/components/ConectaVendasTela";
 import { Validador } from "@/utils/validacoes";
-import { useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useState } from "react";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import { styles } from "./styles";
 
@@ -44,7 +45,7 @@ const Login = ({ navigation }: any) => {
     try {
       setCarregando(true);
     } catch (e) {
-
+      // apresentar alerta de erro para o usuário
     } finally {
       setCarregando(false);
     }
@@ -53,8 +54,21 @@ const Login = ({ navigation }: any) => {
 
   // redirecionar para a tela de esqueci minha senha
   const redirecionarEsqueciSenha = (): void => {
-
+    navigation.navigate("recuperar_senha");
   }
+
+  const resetarCampos = (): void => {
+    setCarregando(false);
+    setEmail("");
+    setSenha("");
+    setSenhaVisivel(false);
+    setErroEmail("");
+    setErroSenha("");
+  }
+
+  useFocusEffect(useCallback(() => {
+    resetarCampos();
+  }, []));
 
   return (
     <ConectaVendasTela>

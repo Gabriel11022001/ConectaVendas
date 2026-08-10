@@ -62,7 +62,7 @@ const Campo = ({
     }
 
     // icone do campo de nome
-    if (tipoCampo === TipoCampo.identificacao) {
+    if (tipoCampo === TipoCampo.identificacao || tipoCampo === TipoCampo.cpf) {
 
       return <Octicons name="person" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
     }
@@ -90,6 +90,68 @@ const Campo = ({
     </Pressable>
   }
 
+  // aplicar mascara de telefone
+  const aplicarMascaraTelefone = (telefone: string): string => {
+    const apenasNumeros = telefone.replace(/\D/g, "");
+
+    if (apenasNumeros.length <= 10) {
+
+      return apenasNumeros
+        .replace(/^(\d{2})(\d)/, "($1) $2")
+        .replace(/(\d{4})(\d)/, "$1-$2");
+    }
+
+    return apenasNumeros
+      .replace(/^(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d)/, "$1-$2")
+      .substring(0, 15);
+  }
+
+  // aplicar mascara de data
+  const aplicarMascaraData = (data: string): string => {
+    const apenasNumeros = data.replace(/\D/g, "");
+
+    return apenasNumeros
+      .replace(/^(\d{2})(\d)/, "$1/$2")
+      .replace(/^(\d{2})\/(\d{2})(\d)/, "$1/$2/$3")
+      .substring(0, 10);
+  }
+
+  // aplicar máscara de CPF
+  const aplicarMascaraCpf = (cpf: string): string => {
+    const apenasNumeros = cpf.replace(/\D/g, "");
+
+    return apenasNumeros
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+      .substring(0, 14);
+  }
+
+  // aplicar mascara no campo
+  const aplicarMascaraCampo = (valorDigitado: string, tipoCampo: TipoCampo): string => {
+
+    // telefone
+    if (tipoCampo === TipoCampo.telefone) {
+
+      return aplicarMascaraTelefone(valorDigitado);
+    }
+
+    // data
+    if (tipoCampo === TipoCampo.data) {
+
+      return aplicarMascaraData(valorDigitado);
+    }
+
+    // cpf
+    if (tipoCampo === TipoCampo.cpf) {
+
+      return aplicarMascaraCpf(valorDigitado);
+    }
+
+    return valorDigitado;
+  }
+
   return (
     <View style={ styles.containerCampo }>
       <View style={ styles.campoIcone }>
@@ -102,7 +164,8 @@ const Campo = ({
           editable={ habilitado }
           placeholder={ placeholder }
           onChangeText={ (novoValorCampo: string) => {
-            onAlterarValor(novoValorCampo);
+            const valorCampoComMascara: string = aplicarMascaraCampo(novoValorCampo, tipoCampo);
+            onAlterarValor(valorCampoComMascara);
           } }
           keyboardType={
             tipoCampo === TipoCampo.email ? "email-address"
