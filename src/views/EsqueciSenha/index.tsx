@@ -34,7 +34,7 @@ const EsqueciSenha = () => {
     } catch (e) {
 
     } finally {
-      
+      setCarregando(false);
     }
 
   }

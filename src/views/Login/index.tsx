@@ -1,6 +1,7 @@
 import { Botao } from "@/components/Botao";
 import Campo, { TipoCampo } from "@/components/Campo";
 import ConectaVendasTela from "@/components/ConectaVendasTela";
+import { useAuth } from "@/hooks/useAuth";
 import { Validador } from "@/utils/validacoes";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useState } from "react";
@@ -10,6 +11,9 @@ import { styles } from "./styles";
 // tela de login do app
 const Login = ({ navigation }: any) => {
 
+  const {
+    efetuarLogin
+  } = useAuth(navigation);
   const [ carregando, setCarregando ] = useState<boolean>(false);
   const [ email, setEmail ] = useState<string>("");
   const [ senha, setSenha ] = useState<string>("");
@@ -40,10 +44,15 @@ const Login = ({ navigation }: any) => {
   }
 
   // efetuar login no app
-  const efetuarLogin = async () => {
+  const login = async () => {
 
     try {
       setCarregando(true);
+
+      await efetuarLogin(
+        email,
+        senha
+      );
     } catch (e) {
       // apresentar alerta de erro para o usuário
     } finally {
@@ -122,7 +131,7 @@ const Login = ({ navigation }: any) => {
             && erroSenha === ""
           }
           onClick={ () => {
-            efetuarLogin();
+            login();
           } } />
         { /** container separando o botão do login do botão de registrar-se */ }
         <View style={ styles.containerOu }>

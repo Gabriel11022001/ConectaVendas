@@ -7,6 +7,7 @@ type Usuario = {
   senha: string;
   ativo: boolean;
   dataNascimento: string;
+  cpf: string;
 
 }
 

@@ -28,6 +28,11 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 15,
     fontWeight: "bold"
+  },
+  containerCaracteresCategoria: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center"
   }
 
 });

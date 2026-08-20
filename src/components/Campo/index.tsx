@@ -16,7 +16,9 @@ export enum TipoCampo {
   cep,
   data,
   default,
-  identificacao
+  identificacao,
+  nomeCategoria,
+  descricaoCategoria
 
 }
 
@@ -30,6 +32,7 @@ interface CampoProps {
   erro: string;
   senhaVisivel?: boolean;
   onVisualizarSenha?: () => void;
+  tamanhoMaximo?: number;
 
 }
 
@@ -44,7 +47,8 @@ const Campo = ({
   habilitado,
   erro,
   senhaVisivel,
-  onVisualizarSenha
+  onVisualizarSenha,
+  tamanhoMaximo
 }: CampoProps) => {
 
   const getIconeCampo = () => {
@@ -77,6 +81,12 @@ const Campo = ({
     if (tipoCampo === TipoCampo.data) {
 
       return <Fontisto name="date" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
+    }
+
+    // icone da categoria
+    if (tipoCampo === TipoCampo.nomeCategoria || tipoCampo === TipoCampo.descricaoCategoria) {
+
+      return <AntDesign name="tag" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
     }
 
   }
@@ -183,8 +193,16 @@ const Campo = ({
             ) 
           }
           underlineColorAndroid="transparent"
-          secureTextEntry={ tipoCampo === TipoCampo.senha && !senhaVisivel } />
+          secureTextEntry={ tipoCampo === TipoCampo.senha && !senhaVisivel }
+          multiline={ tipoCampo === TipoCampo.descricaoCategoria }
+          maxLength={ tamanhoMaximo ? tamanhoMaximo : undefined } />
         { tipoCampo === TipoCampo.senha && <BotaoVisualizarSenha /> }
+        { /** tamanho máximo do campo */ }
+        { tamanhoMaximo && <View style={ styles.containerCaracteresCategoria }>
+          <Text>{ valor.length }</Text>
+          <Text>/</Text>
+          <Text>{ tamanhoMaximo.toString() }</Text>
+        </View> }
       </View>
       { erro != "" && <Text style={ styles.erro }>{ erro }</Text> }
     </View>

@@ -10,7 +10,7 @@ interface ConectaVendasTelaProps {
 const ConectaVendasTela = ({ children }: ConectaVendasTelaProps) => {
 
   return <SafeAreaView style={ {
-    backgroundColor: "#fff",
+    backgroundColor: "#F8F8FC",
     flex: 1
   } }>
     { children }

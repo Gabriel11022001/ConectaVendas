@@ -3,8 +3,9 @@ import Campo, { TipoCampo } from "@/components/Campo";
 import ConectaVendasTela from "@/components/ConectaVendasTela";
 import Loader from "@/components/Loader";
 import TituloTela from "@/components/TituloTela";
+import { UsuarioMesmoCpfException } from "@/exceptions/usuarioMemoCpfException";
 import { UsuarioMesmoEmailException } from "@/exceptions/usuarioMesmoEmailException";
-import { UsuarioMesmoTelefoneException } from "@/exceptions/usuarioMesmoTelefoneException";
+import { UsuarioService } from "@/services/usuarioService";
 import { Usuario } from "@/types/usuario";
 import { Validador } from "@/utils/validacoes";
 import { useState } from "react";
@@ -139,12 +140,23 @@ const CadastroPerfil = ({ navigation }: any) => {
 
   // validar se existe outro usuário cadastrado com o mesmo e-mail
   const validarExisteUsuarioMesmoEmail = async () => {
-    throw new UsuarioMesmoEmailException();
+    
+    if (await UsuarioService.buscarPeloEmail(email.trim())) {
+
+      throw new UsuarioMesmoEmailException();
+    }
+
   }
 
-  // validar se existe outro usuáiro cadastrado com o mesmo telefone
-  const validarExisteOutroUsuarioMesmoTelefone = async () => {
-    throw new UsuarioMesmoTelefoneException();
+  // validar se existe outro usuário cadastrado com o mesmo cpf
+  const validarExisteOutroUsuarioMesmoCpf = async () => {
+    const usuario: Usuario | null = await UsuarioService.buscarPeloCpf(cpf.trim());
+
+    if (usuario) {
+
+      throw new UsuarioMesmoCpfException();
+    }
+
   }
 
   // efetuar o cadastro do usuário
@@ -159,23 +171,28 @@ const CadastroPerfil = ({ navigation }: any) => {
         telefone: telefone.trim(),
         dataNascimento: dataNascimento.trim(),
         ativo: true,
-        senha: senha.trim()
+        senha: senha.trim(),
+        cpf: cpf.trim()
       }
 
-      console.log("Cadastrar o usuário");
-      console.log(usuario);
+      // validar se existe outro usuário cadastrado com o mesmo cpf
+      await validarExisteOutroUsuarioMesmoCpf();
 
       // validar se existe outro usuário cadastrado com o mesmo e-mail
       await validarExisteUsuarioMesmoEmail();
 
-      // validar se existe outro usuário cadastrado com o mesmo telefone
-      await validarExisteOutroUsuarioMesmoTelefone();
+      await UsuarioService.cadastrar(usuario);
+
+      /** 
+       * apresentar um alerta de sucesso para o usuário e autenticar o mesmo,
+       * em seguida, redirecionar o mesmo para a tela home do app
+       */
     } catch (e) {
 
-      if (e as UsuarioMesmoEmailException) {
+      if (e instanceof UsuarioMesmoEmailException) {
         console.log("Existe outro usuário cadastrado com o mesmo e-mail!");
-      } else if (e as UsuarioMesmoTelefoneException) {
-        console.log("Existe outro usuário cadastrado com o mesmo telefone!");
+      } else if (e instanceof UsuarioMesmoCpfException) {
+        console.log("Existe outro usuário cadastrado com o mesmo cpf!");
       } else {
         console.log(`Erro: ${ e }`);
       }
