@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
   corApresentar: {
     width: 30,
     height: 30,
-    borderRadius: 15,
     backgroundColor: "#f1f1f1",
     marginEnd: 6
   },
