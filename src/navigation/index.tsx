@@ -1,6 +1,9 @@
 import BotaoAddCabecalho from '@/components/BotaoAddCabecalho';
 import CadastroCategoria from '@/views/CadastroCategoria';
 import CadastroPerfil from '@/views/CadastroPerfil';
+import DadosBasicosProduto from '@/views/CadastroProduto/DadosBasicosProduto';
+import FotosProduto from '@/views/CadastroProduto/Fotos';
+import SelecionarCategoria from '@/views/CadastroProduto/SelecionarCategoria';
 import CategoriasProduto from '@/views/CategoriasProduto';
 import EsqueciSenha from '@/views/EsqueciSenha';
 import Home from '@/views/Home';
@@ -78,6 +81,27 @@ const telas: Array<{
       apresentaMenu: true,
       nomeTela: "cadastro_categoria",
       tela: CadastroCategoria
+    },
+    {
+      // tela de cadastro de produto
+      titulo: "Cadastro de Produto",
+      apresentaMenu: true,
+      nomeTela: "cadastro_produto",
+      tela: DadosBasicosProduto
+    },
+    {
+      // tela para selecionar a categoria do produto
+      titulo: "Categorias",
+      apresentaMenu: true,
+      nomeTela: "selecionar_categoria",
+      tela: SelecionarCategoria
+    },
+    {
+      // tela com as fotos do produto
+      titulo: "Fotos",
+      apresentaMenu: true,
+      nomeTela: "fotos_produto",
+      tela: FotosProduto
     }
   ];
 

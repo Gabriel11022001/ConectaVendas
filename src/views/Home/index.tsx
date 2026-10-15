@@ -35,6 +35,7 @@ const Home = ({ navigation }: any) => {
       icone: <Feather name="shopping-bag" size={ 30 } color="#fff" />,
       onRedirecionar: () => {
         // redirecionar o usuário para a tela de gestão de produtos
+        navigation.navigate("cadastro_produto");
       },
       cor: "#3498db"
     });

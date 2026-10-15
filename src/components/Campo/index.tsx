@@ -2,6 +2,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Fontisto from '@expo/vector-icons/Fontisto';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Octicons from '@expo/vector-icons/Octicons';
 import { Pressable, Text, TextInput, View } from "react-native";
 import { styles } from './styles';
@@ -18,7 +19,10 @@ export enum TipoCampo {
   default,
   identificacao,
   nomeCategoria,
-  descricaoCategoria
+  descricaoCategoria,
+  descricao,
+  valorMonetario,
+  estoque
 
 }
 
@@ -84,9 +88,23 @@ const Campo = ({
     }
 
     // icone da categoria
-    if (tipoCampo === TipoCampo.nomeCategoria || tipoCampo === TipoCampo.descricaoCategoria) {
+    if (tipoCampo === TipoCampo.nomeCategoria || tipoCampo === TipoCampo.descricaoCategoria
+      || tipoCampo === TipoCampo.descricao
+    ) {
 
       return <AntDesign name="tag" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
+    }
+
+    // icone do campo de estoque
+    if (tipoCampo === TipoCampo.estoque) {
+
+      return <Feather name="box" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
+    }
+
+    // icone do valor monetário
+    if (tipoCampo === TipoCampo.valorMonetario) {
+
+      return <MaterialIcons name="attach-money" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
     }
 
   }
@@ -138,6 +156,22 @@ const Campo = ({
       .substring(0, 14);
   }
 
+  // aplicar mascara de valor monetário no campo
+  const aplicarMascaraValorMonetario = (valor: string): string => {
+    const numero = Number(valor.replace(/\D/g, "")) / 100;
+
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(numero);
+  }
+
+  // aplicar mascara de numero inteiro
+  const aplicarMascaraNumeroInteiro = (numero: string): string => {
+
+    return numero.replace(/\D/g, "");
+  }
+
   // aplicar mascara no campo
   const aplicarMascaraCampo = (valorDigitado: string, tipoCampo: TipoCampo): string => {
 
@@ -157,6 +191,18 @@ const Campo = ({
     if (tipoCampo === TipoCampo.cpf) {
 
       return aplicarMascaraCpf(valorDigitado);
+    }
+
+    // valor monetário
+    if (tipoCampo === TipoCampo.valorMonetario) {
+
+      return aplicarMascaraValorMonetario(valorDigitado);
+    }
+
+    // aplicar mascara de numero inteiro
+    if (tipoCampo === TipoCampo.estoque) {
+
+      return aplicarMascaraNumeroInteiro(valorDigitado);
     }
 
     return valorDigitado;
