@@ -8,6 +8,7 @@ import CategoriasProduto from '@/views/CategoriasProduto';
 import EsqueciSenha from '@/views/EsqueciSenha';
 import Home from '@/views/Home';
 import Login from '@/views/Login';
+import Produtos from '@/views/Produtos';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View } from 'react-native';
@@ -102,6 +103,20 @@ const telas: Array<{
       apresentaMenu: true,
       nomeTela: "fotos_produto",
       tela: FotosProduto
+    },
+    {
+      // tela com a listagem dos produtos
+      titulo: "Produtos",
+      apresentaMenu: true,
+      nomeTela: "produtos",
+      tela: Produtos,
+      botoesDireita: [
+        {
+          habilitado: true,
+          telaRedirecionar: "cadastro_produto",
+          tipo: "add"
+        }
+      ]
     }
   ];
 

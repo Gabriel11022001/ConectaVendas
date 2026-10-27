@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
     width: "90%",
     marginHorizontal: 20,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    marginVertical: 30
   },
   titulo: {
     color: "#000",

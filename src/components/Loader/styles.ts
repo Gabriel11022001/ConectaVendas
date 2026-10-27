@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: 900,
     textAlign: "center",
-    marginBottom: 20
+    marginBottom: 20,
+    marginHorizontal: 20
   },
   imagemFundo: {
     

@@ -14,13 +14,16 @@ import { useEffect, useMemo, useState } from "react";
 import { ScrollView } from "react-native";
 
 // tela de cadastro de produto dados básicos
-const DadosBasicosProduto = ({ navigation }: any) => {
+const DadosBasicosProduto = ({ navigation, route }: any) => {
 
   const {
     categoriaSelecionadaFluxoVenda,
     atualizarDadosProdutoFluxoCadastro,
-    produtoFluxoCadastro
+    produtoFluxoCadastro,
+    selecionarCategoriaProduto,
+    limparFluxoCadastroProduto
   } = useFluxoCadastroProduto();
+
   const [ carregando, setCarregando ] = useState<boolean>(false); 
   const [ idProduto, setIdProduto ] = useState<string>("");
   const [ nomeProduto, setNomeProduto ] = useState<string>("");
@@ -298,7 +301,7 @@ const DadosBasicosProduto = ({ navigation }: any) => {
   }
 
   // redirecionar o usuário para a tela de seleção de categoria
-  const selecionarCategoriaProduto = (): void => {
+  const selecionarCategoriaDoProduto = (): void => {
     
     if (produtoFluxoCadastro != null) {
       const produtoAtualizado: Produto = { ...produtoFluxoCadastro };
@@ -332,6 +335,67 @@ const DadosBasicosProduto = ({ navigation }: any) => {
     navigation.navigate("selecionar_categoria");
   }
 
+  // buscar produto na base de dados
+  const buscarProduto = async () => {
+
+    if (route && route.params && route.params.produtoId) {
+      setIdProduto(route.params.produtoId);
+
+      try {
+        setCarregando(true);
+
+        const produto: Produto | null = await ProdutoService.buscarPeloId(route.params.produtoId);
+
+        if (produto && produto.categoria) {
+          selecionarCategoriaProduto(produto.categoria);
+          atualizarDadosProdutoFluxoCadastro(produto);
+        }
+
+      } catch (e) {
+
+      } finally {
+        setCarregando(false);
+      }
+
+    }
+
+  }
+
+  // limpar todos os campos
+  const limparTodosCampos = (): void => {
+    setErros({
+      nome: "",
+      descricao: "",
+      observacoes: "",
+      altura: "",
+      codigo: "",
+      comprimento: "",
+      estoque: "",
+      garantia: "",
+      largura: "",
+      marca: "",
+      peso: "",
+      preco: "",
+      categoria: ""
+    });
+
+    limparFluxoCadastroProduto();
+
+    setIdProduto("");
+    setNomeProduto("");
+    setDescricao("");
+    setPreco("");
+    setEstoque("");
+    setMarca("");
+    setCodigo("");
+    setObservacoes("");
+    setGarantia("");
+    setPeso("");
+    setComprimento("");
+    setAltura("");
+    setLargura("");
+  }
+
   useEffect(() => {
 
     if (produtoFluxoCadastro != null) {
@@ -350,6 +414,11 @@ const DadosBasicosProduto = ({ navigation }: any) => {
     }
 
   }, [ produtoFluxoCadastro ]);
+
+  useEffect(() => {
+    limparTodosCampos();
+    buscarProduto();
+  }, []);
 
   return <ConectaVendasTela>
     { /** loader */ }
@@ -401,7 +470,7 @@ const DadosBasicosProduto = ({ navigation }: any) => {
       <CampoCategoriaProduto
         categoriaSelecionada={ categoriaSelecionadaFluxoVenda }
         onSelecionarCategoria={ () => {
-          selecionarCategoriaProduto();
+          selecionarCategoriaDoProduto();
         } } />
       { /** título da sessão de informações adicionais do produto */ }
       <TopoTelaTitulo
