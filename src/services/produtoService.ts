@@ -2,7 +2,7 @@ import { CategoriaProduto } from "@/types/categoriaProduto";
 import { FiltroProdutos } from "@/types/filtroProdutos";
 import { FotoProduto, Produto } from "@/types/produto";
 import { getDataHoraAtual } from "@/utils/getDataHoraAtual";
-import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { CategoriaService } from "./categoriaService";
 
@@ -41,8 +41,42 @@ const cadastrarFotos = async (fotos: FotoProduto[], idProduto: string) => {
 
 }
 
+// deletar o produto/fotos
+const deletar = async (id: string) => {
+
+  try {
+    console.log("Deletando o produto de id: " + id);
+
+    const fotos: Array<FotoProduto> = await buscarFotosProduto(id);
+
+    if (fotos.length > 0) {
+
+      for (const fotoDeletar of fotos) {
+        // deletar foto por foto
+        await deleteDoc(
+          doc(db, "tb_fotos_produtos", fotoDeletar.id ?? "")
+        );
+
+        console.log("foto de id " + (fotoDeletar.id ?? "") + " deletada com sucesso da base!");
+      }
+
+    }
+
+    // deletar o produto
+    await deleteDoc(doc(db, "tb_produtos", id));
+
+    console.log("Produto de id " + id + " deletado com sucesso!");
+  } catch (e) {
+    console.log(`Erro ao tentar-se deletar o produto: ${ e }`);
+
+    throw e;
+  }
+
+}
+
 // salvar produto(cadastrar/editar)
 const salvar = async (produto: Produto) => {
+  let idProdCadastrado: string = "";
 
   try {
     
@@ -72,6 +106,7 @@ const salvar = async (produto: Produto) => {
       });
 
       const idProduto: string = documento.id ?? "";
+      idProdCadastrado = idProduto;
 
       if (idProduto) {
         // cadastrar as fotos do produto
@@ -83,6 +118,14 @@ const salvar = async (produto: Produto) => {
 
   } catch (e) {
     console.log(`Erro ao tentar-se salvar o produto na base de dados: ${ e }`);
+
+    /**
+     * se ocorrer algum erro no cadastro do produto, deletar o mesmo
+     * da base para garantir que não vai ficar lixo na base
+     */
+    if (idProdCadastrado != "") {
+      await deletar(idProdCadastrado);
+    }
 
     throw e;
   }

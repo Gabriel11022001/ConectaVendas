@@ -24,7 +24,7 @@ const Produtos = ({ navigation }: any) => {
       { /** título da tela */ }
       <TituloTela
         titulo="Produtos"
-        subtitulo="Gerenciar produtos cadastrados." />
+        subtitulo="Cadastre e gerencie seus produtos e serviços." />
       { /** loader de carregamento */ }
       { carregando && <LoaderListagem carregando={ true } /> }
     </View>

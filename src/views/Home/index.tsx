@@ -25,6 +25,7 @@ const Home = ({ navigation }: any) => {
       icone: <Octicons name="person" size={ 30 } color="#fff" />,
       onRedirecionar: () => {
         // redirecionar o usuário para a tela de gestão de clientes
+        navigation.navigate("clientes");
       },
       cor: "#e74c3c"
     });

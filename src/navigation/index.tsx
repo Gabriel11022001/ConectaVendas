@@ -1,10 +1,12 @@
 import BotaoAddCabecalho from '@/components/BotaoAddCabecalho';
 import CadastroCategoria from '@/views/CadastroCategoria';
+import CadastroCliente from '@/views/CadastroCliente';
 import CadastroPerfil from '@/views/CadastroPerfil';
 import DadosBasicosProduto from '@/views/CadastroProduto/DadosBasicosProduto';
 import FotosProduto from '@/views/CadastroProduto/Fotos';
 import SelecionarCategoria from '@/views/CadastroProduto/SelecionarCategoria';
 import CategoriasProduto from '@/views/CategoriasProduto';
+import Clientes from '@/views/Clientes';
 import EsqueciSenha from '@/views/EsqueciSenha';
 import Home from '@/views/Home';
 import Login from '@/views/Login';
@@ -117,6 +119,27 @@ const telas: Array<{
           tipo: "add"
         }
       ]
+    },
+    {
+      // tela com a listagem dos clientes
+      titulo: "Clientes",
+      apresentaMenu: true,
+      nomeTela: "clientes",
+      tela: Clientes,
+      botoesDireita: [
+        {
+          habilitado: true,
+          telaRedirecionar: "cadastro_cliente",
+          tipo: "add"
+        }
+      ]
+    },
+    {
+      // tela de cadastro de cliente
+      titulo: "Cadastro de Cliente",
+      apresentaMenu: true,
+      nomeTela: "cadastro_cliente",
+      tela: CadastroCliente
     }
   ];
 
