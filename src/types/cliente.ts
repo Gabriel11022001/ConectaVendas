@@ -6,6 +6,7 @@ enum TipoPessoa {
 type Endereco = {
 
   cep: string;
+  logradouro: string;
   endereco: string;
   complemento?: string;
   cidade: string;

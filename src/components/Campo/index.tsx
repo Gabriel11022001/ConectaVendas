@@ -12,6 +12,7 @@ export enum TipoCampo {
   email,
   senha,
   telefone,
+  telefoneFixo,
   cpf,
   cnpj,
   cep,
@@ -22,7 +23,17 @@ export enum TipoCampo {
   descricaoCategoria,
   descricao,
   valorMonetario,
-  estoque
+  estoque,
+  nomePessoa,
+  razaoSocial,
+  rg,
+  dataNascimento,
+  dataFundacao,
+  nomeFantasia,
+  logradouro,
+  bairro,
+  numero,
+  complemento
 
 }
 
@@ -70,13 +81,16 @@ const Campo = ({
     }
 
     // icone do campo de nome
-    if (tipoCampo === TipoCampo.identificacao || tipoCampo === TipoCampo.cpf) {
+    if (tipoCampo === TipoCampo.identificacao || tipoCampo === TipoCampo.cpf
+      || tipoCampo === TipoCampo.nomePessoa
+      || tipoCampo === TipoCampo.rg
+    ) {
 
       return <Octicons name="person" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
     }
 
     // icone do campo de telefone
-    if (tipoCampo === TipoCampo.telefone) {
+    if (tipoCampo === TipoCampo.telefone || tipoCampo === TipoCampo.telefoneFixo) {
 
       return <Feather name="phone" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
     }
@@ -107,6 +121,20 @@ const Campo = ({
       return <MaterialIcons name="attach-money" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
     }
 
+    // icone de calendário
+    if (tipoCampo === TipoCampo.dataNascimento
+      || tipoCampo === TipoCampo.dataFundacao
+    ) {
+
+      return <FontAwesome name="calendar" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
+    }
+
+    // icone de cnpj
+    if (tipoCampo === TipoCampo.cnpj) {
+
+      return <Feather name="home" size={ 30 } color={ variaveisAmbiente.EXPO_PUBLIC_COR_PRIMARIA } />;
+    }
+
   }
 
   // botão de visualizar senha
@@ -133,6 +161,15 @@ const Campo = ({
       .replace(/^(\d{2})(\d)/, "($1) $2")
       .replace(/(\d{5})(\d)/, "$1-$2")
       .substring(0, 15);
+  }
+
+  // aplicar mascara telefone fixo
+  const aplicarMascaraTelefoneFixo = (telefoneFixo: string): string => {
+    const numeros = telefoneFixo.replace(/\D/g, "").slice(0, 10);
+
+    return numeros
+      .replace(/^(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{4})(\d)/, "$1-$2");
   }
 
   // aplicar mascara de data
@@ -172,8 +209,52 @@ const Campo = ({
     return numero.replace(/\D/g, "");
   }
 
+  // aplicar mascara cnpj
+  const aplicarMascaraCnpj = (cnpjDigitado: string): string => {
+
+    return cnpjDigitado
+      .replace(/\D/g, "")
+      .slice(0, 14)
+      .replace(/^(\d{2})(\d)/, "$1.$2")
+      .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+      .replace(/\.(\d{3})(\d)/, ".$1/$2")
+      .replace(/(\d{4})(\d)/, "$1-$2");
+  }
+
+  // aplicar máscara de rg
+  const aplicarMascaraRg = (rg: string): string => {
+
+    return rg
+      .replace(/\D/g, "")
+      .slice(0, 9)
+      .replace(/^(\d{2})(\d)/, "$1.$2")
+      .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+      .replace(/\.(\d{3})(\d)/, ".$1-$2");
+  }
+
+  // aplicar mascara de cep
+  const aplicarMascaraCEP = (cep: string): string => {
+
+    return cep
+      .replace(/\D/g, "")
+      .slice(0, 8)
+      .replace(/^(\d{5})(\d)/, "$1-$2");
+  }
+
   // aplicar mascara no campo
   const aplicarMascaraCampo = (valorDigitado: string, tipoCampo: TipoCampo): string => {
+
+    // cep
+    if (tipoCampo === TipoCampo.cep) {
+
+      return aplicarMascaraCEP(valorDigitado);
+    }
+
+    // cnpj
+    if (tipoCampo === TipoCampo.cnpj) {
+
+      return aplicarMascaraCnpj(valorDigitado);
+    }
 
     // telefone
     if (tipoCampo === TipoCampo.telefone) {
@@ -181,8 +262,23 @@ const Campo = ({
       return aplicarMascaraTelefone(valorDigitado);
     }
 
+    // aplicar mascara de rg
+    if (tipoCampo === TipoCampo.rg) {
+
+      return aplicarMascaraRg(valorDigitado);
+    }
+
+    // telefone fixo
+    if (tipoCampo === TipoCampo.telefoneFixo) {
+
+      return aplicarMascaraTelefoneFixo(valorDigitado);
+    }
+
     // data
-    if (tipoCampo === TipoCampo.data) {
+    if (tipoCampo === TipoCampo.data
+      || tipoCampo === TipoCampo.dataNascimento
+      || tipoCampo === TipoCampo.dataFundacao
+    ) {
 
       return aplicarMascaraData(valorDigitado);
     }

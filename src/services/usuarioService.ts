@@ -53,6 +53,8 @@ const buscarPeloEmailSenha = async (email: string, senha: string) => {
 
     const snapshot = await getDocs(consulta);
 
+    console.log(snapshot.empty);
+
     if (snapshot.empty) {
       console.log(`Não foi encontrado um usuário com o e-mail ${ email } e senha: ${ senha }`);
 
